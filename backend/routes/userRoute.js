@@ -3,10 +3,34 @@ const authMiddleware = require('../middleware/authMiddleware');
 const { createOrUpdateUserBio, updateCoverPhoto, updateUserProfile } = require('../controllers/createOrUpdateController');
 const { checkUserAuth } = require('../controllers/userController')
 const { multerMiddleware } = require('../config/cloudinary');
+const userController = require('../controllers/userController'); 
 const router = express.Router()
 
 console.log("User router loaded");
 
+//user follow 
+router.post('/follow',authMiddleware,userController.followuser)
+
+//user unfollow
+router.post('/unfollow',authMiddleware,userController.unfollowuser)
+
+//remove user from request
+router.post('/remove/friend-request',authMiddleware,userController.deleteUserFromRequest);
+
+//get all friends request
+router.get('/friend-request',authMiddleware,userController.getAllFriendsRequest )
+
+
+//get all friends for request
+router.get('/user-to-request',authMiddleware,userController.getAllUserForFriendsRequest )
+
+
+//get all mutual friends 
+router.get('/mutual-friends/:userId',authMiddleware,userController.getAllMutualFriends)
+
+
+//get all users from search
+router.get('/',authMiddleware,userController.getAllUser)
 //get all users fror search 
 router.get('/check-auth',authMiddleware, checkUserAuth)
 

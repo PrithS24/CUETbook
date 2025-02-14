@@ -39,10 +39,10 @@ const createPost = async(req,res) => {
 const getAllPosts = async(req,res) => {
     try {
         const posts = await Post.find().sort({createdAt: -1})
-        .populate('user','_id username profilePicture email')
+        .populate('user','_id name profilePicture email')
         .populate({
             path: 'comments.user',
-            select: 'username, profilePicture'
+            select: 'name, profilePicture'
         })
         return response(res, 201, 'Get all posts successfully', posts)
     } catch (error) {
@@ -59,10 +59,10 @@ const getPostByUserId = async(req,res) => {
             return response(res, 400, 'UserId is required to get user post(s)')
         }
         const posts = await Post.findById({user: userId}).sort({createdAt: -1})
-        .populate('user','_id username profilePicture email')
+        .populate('user','_id name profilePicture email')
         .populate({
             path: 'comments.user',
-            select: 'username, profilePicture'
+            select: 'name, profilePicture'
         })
         return response(res, 201, 'Get all posts by userId successfully', posts)
     } catch (error) {
