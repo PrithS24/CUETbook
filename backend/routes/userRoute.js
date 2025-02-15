@@ -28,7 +28,8 @@ router.get('/user-to-request',authMiddleware,userController.getAllUserForFriends
 //get all mutual friends 
 router.get('/mutual-friends/:userId',authMiddleware,userController.getAllMutualFriends)
 
-
+// ✅ Get all accepted friends (new route)
+router.get('/accepted-friends', authMiddleware, userController.getAcceptedFriends);
 //get all users from search
 router.get('/',authMiddleware,userController.getAllUser)
 //get all users fror search 
@@ -36,7 +37,7 @@ router.get('/check-auth',authMiddleware, checkUserAuth)
 
 // create or update user Bio
 router.put('/bio/:userId', authMiddleware, createOrUpdateUserBio)
-
+router.get('/profile/:userId',authMiddleware,userController.getUserProfile)
 // update user profile
 router.put('/profile/:userId', authMiddleware, multerMiddleware.single('profilePicture'), updateUserProfile)
 

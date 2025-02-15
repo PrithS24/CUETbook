@@ -189,6 +189,29 @@ const getAllUserForFriendsRequest = async(req,res)=>{
         return response(res, 500, "Internal server error", error.message);
     }
 }
+const getAcceptedFriends = async (req, res) => {
+    try {
+        const loggedInUserId = req.user.userId;
+
+        // ✅ Ensure logged-in user exists
+        const loggedInUser = await User.findById(loggedInUserId).select("followers following");
+        if (!loggedInUser) {
+            return response(res, 404, "User not found");
+        }
+
+        // ✅ Fetch mutual friends (users who follow each other)
+        const acceptedFriends = await User.find({
+            _id: { $in: loggedInUser.following, $in: loggedInUser.followers }  // ✅ Ensure mutual follow check
+        }).select("name profilePicture email");
+
+        console.log("Accepted Friends Backend Response:", acceptedFriends);  // ✅ Debugging
+
+        return response(res, 200, "Accepted friends retrieved successfully", acceptedFriends);
+    } catch (error) {
+        console.error("Error fetching accepted friends:", error);
+        return response(res, 500, "Internal server error", error.message);
+    }
+};
 
 //api for mutual friends
 const getAllMutualFriends= async(req,res)=>{
@@ -356,6 +379,7 @@ module.exports = {
     getAllMutualFriends,
     getAllUser,
     checkUserAuth,
-    getUserProfile
+    getUserProfile,
+    getAcceptedFriends
 };
 
